@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Comments;
+use App\Komentar;
 
 class KomentarController extends Controller
 {
@@ -36,25 +36,25 @@ class KomentarController extends Controller
      */
     public function store(Request $request)
     {
-		$a = rand(0,1000); //random angka dari 0 sampai 1000
+		$id = $request->catatan;
 
-		$komentar= new Comments;
+		$komentar= new Komentar;
 		$komentar->nama=$request->get('nama');
-		$komentar->comment=$request->get('komentar');
-		$komentar->post_id=$a;
+		$komentar->komentar=$request->get('komentar');
+		$komentar->catatan=$id;
 		// dd($komentar);
         $komentar->save();
         
-        return redirect('tampil')->with('success', 'Komentar Berhasil Ditambah');
+        return redirect('/'.$id)->with('success', 'Komentar Berhasil Ditambah');
 	}
 	
 	public function destroy($id) {
 		// DB::delete('from comments where id = ?',[$id]);
 		// echo "Record deleted successfully.<br/>";
 		// echo '<a href = "/delete-records">Click Here</a> to go back.';
-		$hapus = Comments::find($id);
+		$hapus = Komentar::find($id);
 		$hapus->delete();
-		return redirect('tampil');
+		return redirect('administrator/komentar');
 	 }
 	// public function show() {
 	// 	$data = DB::table('comments')

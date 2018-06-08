@@ -11,27 +11,54 @@
 |
 */
 
-Route::resource('/', 'VisitorController');
-Route::resource('/komentar', 'KomentarController');
-Route::resource('/tampil', 'KomentarController');
+// Route::get('administrator/', 'CatatanController@index');
+// Route::get('administrator/catatan', 'CatatanController@catatan');
+// Route::get('administrator/tambah', 'CatatanController@tambah');
+// Route::post('administrator/proses', 'CatatanController@pro');
+// Route::get('administrator/catatan/{id}', 'CatatanController@show');
 
-Route::get('hapus/{id}','KomentarController@destroy');
-// Route::post('/hapus', 'KomentarController');
-// Route::get('delete/{id}','KomentarController@destroy');
-// Route::get('/blog', 'KomentarController');
-// Route::resource('passports','PassportController');
-
-// Route::get('/post/{id}', 'VisitorController@showPage');
-// Route::get('/post/{id}', 'VisitorController@showPage');
-
-// Route::group(['prefix' => 'admin',  'middleware' => 'auth'], function()
-// {
-// 	Route::resource('/post','PostController');
-// 	Route::post('/delete','PostController@destroyall');
-// 	Route::get('/home', 'HomeController@index')->name('home');
-// 	Route::get('/comment','CommentController@index');   
+// Route::get('administrator/catatan/edit/{id}', 'CatatanController@edit');
+// Route::resource('administrator/edit', 'CatatanController@update');
+// Route::get('/administrator/daftar', function () {
+//     return view('auth/register');
 // });
 
+Route::get('administrator/galeri', ['as' => 'image.upload', 'uses' => 'ImageUploadController@imageupload']);
+Route::post('administrator/galeri', ['as' => 'image.upload.post', 'uses' => 'ImageUploadController@uploadimage']);
+Route::get('administrator/data-galeri', ['uses' => 'ImageUploadController@index']);
 
-Auth::routes();
+Route::get('/', 'BerandaController@index');
+Route::get('/catatan', 'BerandaController@catatan');
+Route::get('/galeri', 'BerandaController@galeri');
+Route::get('/login', function () {
+    return view('auth/login');
+});
+Route::get('/administrator/masuk', function () {
+    return view('auth/login');
+});
+Route::get('administrator/tambah', function () {
+    return view('admin/tambah-catatan');
+});
+Route::get('administrator/tambah', function () {
+    return view('admin/tambah-catatan');
+});
+Route::get('administrator/dashboard', 'CatatanController@dashboard');
+Route::get('administrator/komentar', 'CatatanController@komentar');
 
+
+Route::get('administrator/catatan','CatatanController@catatan');
+Route::get('/{id}', 'BerandaController@detail');
+Route::get('administrator/catatan/{id}','CatatanController@detail');
+Route::get('administrator/edit/{id}','CatatanController@edit');
+
+Route::get('administrator/profil','ProfilController@index');
+Route::get('administrator/profil/{id}','ProfilController@edit');
+
+Route::group(['middleware' => ['web']], function() {
+    Route::resource('administrator','CatatanController');
+    Route::resource('administrator/hapuskomen','KomentarController');
+    Route::resource('administrator/proses','ProfilController');
+    Route::resource('/proses','KomentarController');
+    Route::put('administrator','CatatanController@update');
+    Route::put('administrator/proses-ubah/{id}','ProfilController@upd');
+});
